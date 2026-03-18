@@ -1,23 +1,17 @@
-databases:
-  - name: x-tool-postgres
-    plan: free
-    databaseName: x_tool
-    user: x_tool
-
+# Release channel: latest
+# Last published tag: x-tool-v0.1.0
 services:
   - type: web
     name: x-tool
     runtime: go
     plan: free
-    buildCommand: mkdir -p bin && curl -fsSL -o bin/x-tool "https://github.com/$X_TOOL_DIST_REPO/releases/download/$X_TOOL_RELEASE_TAG/$X_TOOL_BINARY_NAME" && chmod +x bin/x-tool
+    buildCommand: mkdir -p bin && curl -fsSL -o bin/x-tool "https://github.com/$X_TOOL_DIST_REPO/releases/latest/download/$X_TOOL_BINARY_NAME" && chmod +x bin/x-tool
     startCommand: ./bin/x-tool
     autoDeploy: true
     healthCheckPath: /
     envVars:
       - key: X_TOOL_DIST_REPO
         value: "dist-hub/dist"
-      - key: X_TOOL_RELEASE_TAG
-        value: "x-tool-v0.1.0"
       - key: X_TOOL_BINARY_NAME
         value: "x-tool_linux_amd64"
 
@@ -44,9 +38,7 @@ services:
       - key: X_TOOL_DB_DRIVER
         value: "postgres"
       - key: X_TOOL_DB_DSN
-        fromDatabase:
-          name: x-tool-postgres
-          property: connectionString
+        sync: false
 
       # First-run seed default
       - key: X_TOOL_DEFAULT_CLIENT_KEY
