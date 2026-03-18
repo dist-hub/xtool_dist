@@ -11,7 +11,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: X_TOOL_DIST_REPO
-        value: "dist-hub/dist"
+        value: "dist-hub/xtool_dist"
       - key: X_TOOL_BINARY_NAME
         value: "x-tool_linux_amd64"
 
