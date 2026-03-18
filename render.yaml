@@ -1,0 +1,53 @@
+databases:
+  - name: x-tool-postgres
+    plan: free
+    databaseName: x_tool
+    user: x_tool
+
+services:
+  - type: web
+    name: x-tool
+    runtime: go
+    plan: free
+    buildCommand: mkdir -p bin && curl -fsSL -o bin/x-tool "https://github.com/$X_TOOL_DIST_REPO/releases/download/$X_TOOL_RELEASE_TAG/$X_TOOL_BINARY_NAME" && chmod +x bin/x-tool
+    startCommand: ./bin/x-tool
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: X_TOOL_DIST_REPO
+        value: "dist-hub/dist"
+      - key: X_TOOL_RELEASE_TAG
+        value: "x-tool-v0.1.0"
+      - key: X_TOOL_BINARY_NAME
+        value: "x-tool_linux_amd64"
+
+      # Do not set X_TOOL_PORT here. Render injects PORT automatically,
+      # and the app already falls back to PORT when X_TOOL_PORT is unset.
+      - key: X_TOOL_HOST
+        value: "0.0.0.0"
+      - key: X_TOOL_TIMEOUT
+        value: "180"
+
+      # Logging
+      - key: X_TOOL_LOG_PATH
+        value: "logs/app.log"
+      - key: X_TOOL_LOG_MAX_SIZE_MB
+        value: "100"
+      - key: X_TOOL_LOG_MAX_BACKUPS
+        value: "5"
+
+      # Admin
+      - key: X_TOOL_ADMIN_PASSWORD
+        generateValue: true
+
+      # Database
+      - key: X_TOOL_DB_DRIVER
+        value: "postgres"
+      - key: X_TOOL_DB_DSN
+        fromDatabase:
+          name: x-tool-postgres
+          property: connectionString
+
+      # First-run seed default
+      - key: X_TOOL_DEFAULT_CLIENT_KEY
+        generateValue: true
