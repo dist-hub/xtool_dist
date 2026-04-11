@@ -1,10 +1,11 @@
 # Release channel: latest
-# Last published tag: x-tool-v0.1.2
+# Last published tag: x-tool-v0.1.5
 services:
   - type: web
     name: x-tool
     runtime: go
     plan: free
+    region: singapore
     buildCommand: mkdir -p bin && curl -fsSL -o bin/x-tool "https://github.com/$X_TOOL_DIST_REPO/releases/latest/download/$X_TOOL_BINARY_NAME" && chmod +x bin/x-tool
     startCommand: ./bin/x-tool
     autoDeploy: true
