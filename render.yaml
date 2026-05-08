@@ -1,5 +1,5 @@
 # Release channel: latest
-# Last published tag: x-tool-v0.1.7
+# Last published tag: x-tool-v0.1.8
 services:
   - type: web
     name: x-tool
